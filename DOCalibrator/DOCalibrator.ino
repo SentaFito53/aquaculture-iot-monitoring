@@ -1,24 +1,23 @@
-#include <DOCalibrator.h>
-
-DOCalibrator doSensor(34, 3.3, 4095.0);
+#define DO_PIN 34              // analog Pin
+#define VREF 3.3               // reference voltage
+#define ADC_RES 4095.0         // ESP32 ADC Resolution
+#define DO_K 4.236             // Constanta calib result expose-to-air
 
 void setup() {
   Serial.begin(115200);
-  doSensor.begin();
-  Serial.println("Type CAL:<nilai DO jenuh> for Calib, ex: CAL:8.26");
 }
 
 void loop() {
-  float voltage = doSensor.getVoltage();
-  float doVal = doSensor.readDO();
+  int adcValue = analogRead(DO_PIN);
+  float voltage = adcValue * VREF / ADC_RES;
+
+  float doValue = voltage * DO_K;
 
   Serial.print("Voltage: ");
   Serial.print(voltage, 3);
   Serial.print(" V | DO: ");
-  Serial.print(doVal, 2);
+  Serial.print(doValue, 2);
   Serial.println(" mg/L");
-
-  doSensor.handleSerialCalibration();
 
   delay(1000);
 }
