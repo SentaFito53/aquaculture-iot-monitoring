@@ -50,7 +50,7 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 
 ---
 
-### 🔹 2. DO Sensor Calibration (via `DOCalibrator.ino`)
+### 🔹 2. DO Sensor Calibration (via [DOCalibrator.ino](https://github.com/SentaFito53/aquaculture-iot-monitoring/blob/main/DOCalibrator/DOCalibrator.ino))
 
 > Calibration for the DO sensor is handled **separately** using the `DOCalibrator.ino` sketch.
 
