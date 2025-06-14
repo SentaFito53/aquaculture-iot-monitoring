@@ -19,11 +19,10 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 ## 🔧 Hardware Used
 
 - ESP32 Dev Board
-- pH Sensor (Gravity Analog pH Meter)
-- TDS Sensor (Gravity Analog TDS Meter)
-- DO Sensor (Gravity Analog Dissolved Oxygen)
+- pH Sensor (Gravity Analog pH Meter by DFRobot)
+- TDS Sensor (Gravity Analog TDS Meter by DFRobot)
+- DO Sensor (Gravity Analog Dissolved Oxygen by DFRobot)
 - 20x4 LCD I2C
-- Breadboard and jumper wires
 
 ---
 
