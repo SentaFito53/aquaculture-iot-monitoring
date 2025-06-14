@@ -37,13 +37,14 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 1. Prepare pH buffer solutions (usually pH 4.0 and pH 7.0).
 2. Open Serial Monitor at **115200 baud**.
 3. Follow the on-screen instructions.
-4. Example command:
-5. Repeat for other pH values if necessary.
+4. Example command: ENTERPH (enter Calib mode), CALPH (read current pH value), and EXITPH (save calib value)
+5. Before EXITPH make sure the pH value is stable
+6. Repeat for other pH values if necessary.
 
 #### 💧 How to calibrate TDS sensor:
-1. Use a TDS calibration solution (e.g., 707 ppm).
+1. Use a TDS calibration solution (e.g., 500 ppm).
 2. Open Serial Monitor.
-3. Type the command:
+3. Type the command: enter (enter Calib mode), cal:500 (set current TDS Value), and exit (save calib value)
 
 > The calibration constants are automatically saved to **EEPROM** and persist after reset.
 
@@ -57,11 +58,10 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 1. Make sure the DO sensor is **dry and exposed to air**.
 2. Upload and run `DOCalibrator.ino`.
 3. Open Serial Monitor at **115200 baud**.
-4. Enter the command:
+4. Read the voltage value
+5. Enter the voltage value to this formula (voltage/8.26)
+6. Value from the equation will be entered to DO_K variabel on `main.ino`
 > 8.26 is the typical DO value in air at sea level and 25°C.
-
-5. After calibration, the constant is saved to **EEPROM**.
-6. You can now use the `main.ino` sketch to monitor DO along with pH and TDS.
 
 ---
 
