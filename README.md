@@ -11,6 +11,7 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 - 💧 Monitors **TDS** (Total Dissolved Solids) (ppm)
 - 📟 Displays data on **I2C 20x4 LCD**
 - ☁️ Sends data to **Firebase Realtime Database**
+- 📊 **Logs data to Google Spreadsheet** via Google Apps Script webhook
 - 🛠️ Supports **sensor calibration via Serial commands**
 - 💾 Stores calibration values in **EEPROM** (retained after reset)
 
