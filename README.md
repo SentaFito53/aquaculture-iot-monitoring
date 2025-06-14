@@ -29,7 +29,7 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 
 ## ⚙️ Sensor Calibration Guide
 
-### 🔹 1. pH & TDS Calibration (via `main.ino`)
+### 🔹 1. pH & TDS Calibration (via [main.ino](https://github.com/SentaFito53/aquaculture-iot-monitoring/blob/main/main/main.ino))
 
 > Calibration is done via the **Serial Monitor** while running `main.ino`.
 
