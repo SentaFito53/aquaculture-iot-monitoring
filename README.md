@@ -5,6 +5,7 @@ This project is an IoT-based water quality monitoring system designed for aquacu
 This project is an ESP32-based IoT system designed to monitor pond water quality in real-time using Dissolved Oxygen (DO), pH, and TDS sensors. The data is displayed on a 20x4 LCD and sent to Firebase Realtime Database.
 
 📦 Key Features
+
 🚰 Monitoring Dissolved Oxygen (DO) levels (mg/L)
 
 🌡️ Monitoring pH value (water acidity)
@@ -18,6 +19,8 @@ This project is an ESP32-based IoT system designed to monitor pond water quality
 🛠️ Sensor calibration via Serial commands
 
 💾 Calibration values stored in EEPROM (retained after restart)
+
+
 
 🔧 Hardware Used
 ESP32 Dev Board
