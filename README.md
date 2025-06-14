@@ -66,13 +66,12 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 ---
 
 ## 📁 File Structure
-
 .
-├── main.ino # Program utama monitoring air (DO, pH, TDS)
-├── DOCalibrator.ino # Program terpisah untuk kalibrasi sensor DO
+├── main.ino # Main program for monitoring DO, pH, and TDS
+├── DOCalibrator.ino # Separate program for DO sensor calibration
 ├── /lib
-│ ├── GravityWaterQuality # Library untuk sensor TDS dan pH
-│ └── DOCalibrator # Library untuk kalibrasi DO dan penyimpanan EEPROM
-├── /data # Folder opsional untuk data logging (jika pakai LittleFS)
-├── README.md # Dokumentasi proyek
-└── .gitignore # File konfigurasi Git ignore
+│ ├── GravityWaterQuality # Library for TDS and pH sensors
+│ └── DOCalibrator # Library for DO calibration and EEPROM handling
+├── /data # Optional folder for data logging (LittleFS or similar)
+├── README.md # Project documentation
+└── .gitignore # Git ignore rules
