@@ -1,0 +1,20 @@
+TDS Sensor:
+  - VCC = 3.3V
+  - GND = GND
+  - Analog Output = GPIO 35 (A0)
+
+pH Sensor:
+  - VCC = 3.3V
+  - GND = GND
+  - Analog Output = GPIO 36 (A1)
+
+DO Sensor:
+  - VCC = 3.3V
+  - GND = GND
+  - Analog Output = GPIO 34
+
+LCD I2C 20x4:
+  - SDA = GPIO 21
+  - SCL = GPIO 22
+  - VCC = 3.3V
+  - GND = GND
