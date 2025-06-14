@@ -1,0 +1,64 @@
+function checkAndLogFirebaseData() {
+  const firebaseURL = "<your database url>/<value header>.json";
+
+  try {
+    const response = UrlFetchApp.fetch(firebaseURL);
+    const data = JSON.parse(response.getContentText());
+
+    const newDO = data.do;
+    const newPH = data.ph;
+    const newTDS = data.tds;
+
+    if (newDO === undefined || newPH === undefined || newTDS === undefined) {
+      Logger.log("❌ Data do/ph/tds tidak ditemukan di node 'monitoringkolam'.");
+      return;
+    }
+
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Log Monitoring Air Kolam");
+    if (!sheet) {
+      Logger.log("❌ Sheet 'Log Monitoring Air Kolam' tidak ditemukan.");
+      return;
+    }
+
+    const startRow = 3;    // mulai dari baris ke-3
+    const startCol = 2;    // kolom B
+
+    const lastRow = sheet.getLastRow();
+    const dataLastRow = lastRow < startRow ? startRow - 1 : lastRow;
+
+    let lastDO = "", lastPH = "", lastTDS = "";
+
+    if (dataLastRow >= startRow) {
+      lastDO = sheet.getRange(dataLastRow, startCol + 1).getValue(); // kolom C
+      lastPH = sheet.getRange(dataLastRow, startCol + 2).getValue(); // kolom D
+      lastTDS = sheet.getRange(dataLastRow, startCol + 3).getValue(); // kolom E
+    }
+
+    Logger.log(`LAST => DO: ${lastDO}, pH: ${lastPH}, TDS: ${lastTDS}`);
+    Logger.log(`NEW  => DO: ${newDO}, pH: ${newPH}, TDS: ${newTDS}`);
+
+    if (newDO != lastDO || newPH != lastPH || newTDS != lastTDS) {
+      const newRow = dataLastRow + 1;
+      const values = [[new Date(), newDO, newPH, newTDS]];
+
+      // Tulis data mulai dari kolom B
+      sheet.getRange(newRow, startCol, 1, 4).setValues(values);
+
+      // Format timestamp (kolom B) agar tampil dd/MM/yyyy HH:mm:ss
+      sheet.getRange(newRow, startCol, 1, 1).setNumberFormat("dd/MM/yyyy HH:mm:ss");
+
+      // Format center
+      sheet.getRange(newRow, startCol, 1, 4).setHorizontalAlignment("center");
+
+      // Tambah border penuh
+      sheet.getRange(newRow, startCol, 1, 4).setBorder(true, true, true, true, true, true);
+
+      Logger.log("✅ Data baru ditulis di kolom B-E mulai baris 3.");
+    } else {
+      Logger.log("ℹ️ Data sama, tidak dicetak.");
+    }
+
+  } catch (e) {
+    Logger.log("❌ Error: " + e);
+  }
+}
