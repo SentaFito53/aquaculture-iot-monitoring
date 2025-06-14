@@ -6,16 +6,28 @@ This project is an ESP32-based IoT system designed to monitor pond water quality
 
 📦 Key Features
 🚰 Monitoring Dissolved Oxygen (DO) levels (mg/L)
+
 🌡️ Monitoring pH value (water acidity)
+
 💧 Monitoring TDS (Total Dissolved Solids) (ppm)
+
 📟 Displaying data on a 20x4 I2C LCD
+
 ☁️ Integration with Firebase Realtime Database
+
 🛠️ Sensor calibration via Serial commands
+
 💾 Calibration values stored in EEPROM (retained after restart)
 
 🔧 Hardware Used
 ESP32 Dev Board
+
 pH Sensor (Gravity Analog pH Meter by DFRobot)
+
 TDS Sensor (Gravity Analog TDS Meter by DFRobot)
+
 DO Sensor (Gravity Analog Dissolved Oxygen by DFRobot)
+
 I2C 20x4 LCD
+
+Breadboard and jumper wires
