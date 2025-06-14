@@ -64,14 +64,3 @@ This project is an IoT-based water quality monitoring system using ESP32. It mea
 > 8.26 is the typical DO value in air at sea level and 25°C.
 
 ---
-
-## 📁 File Structure
-.
-├── main.ino # Main program for monitoring DO, pH, and TDS
-├── DOCalibrator.ino # Separate program for DO sensor calibration
-├── /lib
-│ ├── GravityWaterQuality # Library for TDS and pH sensors
-│ └── DOCalibrator # Library for DO calibration and EEPROM handling
-├── /data # Optional folder for data logging (LittleFS or similar)
-├── README.md # Project documentation
-└── .gitignore # Git ignore rules
