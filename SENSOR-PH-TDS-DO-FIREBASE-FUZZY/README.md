@@ -45,7 +45,7 @@ Status: Good
 
 ```json
 {
-  "monitoringkolam": {
+  "data_sensor": {
     "ph": 7.32,
     "tds": 238,
     "do": 6.80,
