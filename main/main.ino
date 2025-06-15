@@ -7,12 +7,12 @@
 #include <LiquidCrystal_I2C.h>
 
 // ====================== WiFi and Firebase Configuration =======================
-#define WIFI_SSID "Polibatam"
+#define WIFI_SSID ""
 #define WIFI_PASSWORD ""
-#define API_KEY "AIzaSyDNojusrLaKfrNaw9wtlBPjyLOibCrolnw"
-#define DATABASE_URL "https://monitoringkolam-55ac7-default-rtdb.firebaseio.com/"
-#define USER_EMAIL "ptfamsgroupsejahtera@gmail.com"
-#define USER_PASSWORD "Aremania0778"
+#define API_KEY ""
+#define DATABASE_URL ""
+#define USER_EMAIL ""
+#define USER_PASSWORD ""
 
 // ====================== Sensor Configuration =======================
 #define TDS_PIN 35
