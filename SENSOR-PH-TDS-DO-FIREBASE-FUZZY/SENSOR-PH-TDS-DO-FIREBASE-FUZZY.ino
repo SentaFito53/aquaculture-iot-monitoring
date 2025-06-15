@@ -6,7 +6,7 @@
 #include <Wire.h>
 #include <LiquidCrystal_I2C.h>
 
-// ====================== Konfigurasi WiFi dan Firebase =======================
+// ====================== WiFi and Firebase Configuration =======================
 #define WIFI_SSID ""
 #define WIFI_PASSWORD ""
 #define API_KEY ""
@@ -14,7 +14,7 @@
 #define USER_EMAIL ""
 #define USER_PASSWORD ""
 
-// ====================== Konfigurasi Sensor =======================
+// ====================== Sensor Configuration =======================
 #define TDS_PIN 35
 #define PH_PIN 36
 #define DO_PIN 34
@@ -24,7 +24,7 @@
 #define DO_K 7.277533
 float temperature = 25.0;
 
-// ====================== Objek Firebase & Sensor =======================
+// ====================== Firebase and Sensor Objects =======================
 FirebaseData fbdo;
 FirebaseAuth auth;
 FirebaseConfig config;
@@ -32,9 +32,9 @@ GravityWaterQuality gwq;
 LiquidCrystal_I2C lcd(0x27, 20, 4);
 
 float doValue, tdsValue, phValue;
-String kolamStatus = "-";
+String waterStatus = "-";
 
-// ====================== Fuzzy Logic Membership Function =======================
+// ====================== Fuzzy Logic Membership Functions =======================
 float lowPH(float pH) {
   if (pH <= 6) return 1.0;
   else if (pH > 6 && pH < 6.5) return (6.5 - pH) / 0.5;
@@ -85,19 +85,20 @@ float highDO(float DO) {
   return 0.0;
 }
 
-float evaluatePondQuality(float pH, float TDS, float DO) {
-  float rule1 = min(min(lowPH(pH), lowTDS(TDS)), lowDO(DO));   // Tidak Baik
-  float rule2 = min(min(lowPH(pH), lowTDS(TDS)), highDO(DO));  // Baik
-  float rule3 = min(min(lowPH(pH), highTDS(TDS)), lowDO(DO));  // Tidak Baik
-  float rule4 = min(min(lowPH(pH), highTDS(TDS)), highDO(DO)); // Tidak Baik
-  float rule5 = min(min(normalPH(pH), lowTDS(TDS)), lowDO(DO));// Tidak Baik
-  float rule6 = min(min(normalPH(pH), lowTDS(TDS)), highDO(DO));// Baik
-  float rule7 = min(min(normalPH(pH), highTDS(TDS)), lowDO(DO));// Tidak Baik
-  float rule8 = min(min(normalPH(pH), highTDS(TDS)), highDO(DO));// Baik
-  float rule9 = min(min(highPH(pH), lowTDS(TDS)), lowDO(DO));   // Tidak Baik
-  float rule10 = min(min(highPH(pH), lowTDS(TDS)), highDO(DO)); // Baik
-  float rule11 = min(min(highPH(pH), highTDS(TDS)), lowDO(DO)); // Tidak Baik
-  float rule12 = min(min(highPH(pH), highTDS(TDS)), highDO(DO));// Baik
+// ====================== Fuzzy Logic Evaluation =======================
+float evaluateWaterQuality(float pH, float TDS, float DO) {
+  float rule1 = min(min(lowPH(pH), lowTDS(TDS)), lowDO(DO));
+  float rule2 = min(min(lowPH(pH), lowTDS(TDS)), highDO(DO));
+  float rule3 = min(min(lowPH(pH), highTDS(TDS)), lowDO(DO));
+  float rule4 = min(min(lowPH(pH), highTDS(TDS)), highDO(DO));
+  float rule5 = min(min(normalPH(pH), lowTDS(TDS)), lowDO(DO));
+  float rule6 = min(min(normalPH(pH), lowTDS(TDS)), highDO(DO));
+  float rule7 = min(min(normalPH(pH), highTDS(TDS)), lowDO(DO));
+  float rule8 = min(min(normalPH(pH), highTDS(TDS)), highDO(DO));
+  float rule9 = min(min(highPH(pH), lowTDS(TDS)), lowDO(DO));
+  float rule10 = min(min(highPH(pH), lowTDS(TDS)), highDO(DO));
+  float rule11 = min(min(highPH(pH), highTDS(TDS)), lowDO(DO));
+  float rule12 = min(min(highPH(pH), highTDS(TDS)), highDO(DO));
 
   float totalWeight = rule1 + rule2 + rule3 + rule4 + rule5 + rule6 +
                       rule7 + rule8 + rule9 + rule10 + rule11 + rule12;
@@ -111,27 +112,27 @@ float evaluatePondQuality(float pH, float TDS, float DO) {
   return weightedSum / totalWeight;
 }
 
-void fuzzyf(float pH, float TDS, float DO) {
-  float score = evaluatePondQuality(pH, TDS, DO);
-  Serial.print("Skor Kualitas Kolam: ");
+void fuzzyEvaluation(float pH, float TDS, float DO) {
+  float score = evaluateWaterQuality(pH, TDS, DO);
+  Serial.print("Water Quality Score: ");
   Serial.println(score);
 
   if (score < 50) {
-    kolamStatus = "Tidak Baik";
+    waterStatus = "Poor";
   } else {
-    kolamStatus = "Baik";
+    waterStatus = "Good";
   }
 }
 
 void setup() {
   Serial.begin(115200);
   EEPROM.begin(512);
-  Wire.begin(21, 22);
+  Wire.begin(21, 22);  // SDA, SCL for ESP32
 
   lcd.init();
   lcd.backlight();
   lcd.setCursor(0, 0);
-  lcd.print("Monitoring Kolam");
+  lcd.print("Pond Monitoring");
 
   gwq.setTDSPin(TDS_PIN);
   gwq.setPHPin(PH_PIN);
@@ -142,14 +143,14 @@ void setup() {
 
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
   lcd.setCursor(0, 1);
-  lcd.print("WiFi connecting...");
+  lcd.print("Connecting WiFi...");
   while (WiFi.status() != WL_CONNECTED) {
     delay(500);
     Serial.print(".");
   }
 
   lcd.setCursor(0, 1);
-  lcd.print("WiFi connected     ");
+  lcd.print("WiFi Connected     ");
   Serial.println("\nWiFi connected");
 
   config.api_key = API_KEY;
@@ -184,29 +185,29 @@ void loop() {
   phValue = gwq.getPHValue();
   tdsValue = gwq.getTDSValue();
 
-  fuzzyf(phValue, tdsValue, doValue);
+  fuzzyEvaluation(phValue, tdsValue, doValue);
 
   Serial.print("DO: "); Serial.print(doValue, 2);
   Serial.print(" | TDS: "); Serial.print(tdsValue, 0);
   Serial.print(" | pH: "); Serial.print(phValue, 2);
-  Serial.print(" | Status: "); Serial.println(kolamStatus);
+  Serial.print(" | Status: "); Serial.println(waterStatus);
 
   lcd.setCursor(0, 0);
-  lcd.print("pH : "); lcd.print(phValue, 2); lcd.print("  ");
+  lcd.print("pH : "); lcd.print(phValue, 2); lcd.print("   ");
   lcd.setCursor(0, 1);
   lcd.print("DO : "); lcd.print(doValue, 2); lcd.print(" mg/L   ");   
   lcd.setCursor(0, 2);
   lcd.print("TDS: "); lcd.print(tdsValue, 0); lcd.print(" ppm     ");
   lcd.setCursor(0, 3);
-  lcd.print("Kualitas: "); lcd.print(kolamStatus);
+  lcd.print("Status: "); lcd.print(waterStatus); lcd.print("     ");
 
   if (Firebase.ready()) {
-    Firebase.setFloat(fbdo, "/monitoringkolam/do", doValue);
-    Firebase.setFloat(fbdo, "/monitoringkolam/tds", tdsValue);
-    Firebase.setFloat(fbdo, "/monitoringkolam/ph", phValue);
-    Firebase.setString(fbdo, "/monitoringkolam/status", kolamStatus);
+    Firebase.setFloat(fbdo, "/pondmonitor/do", doValue);
+    Firebase.setFloat(fbdo, "/pondmonitor/tds", tdsValue);
+    Firebase.setFloat(fbdo, "/pondmonitor/ph", phValue);
+    Firebase.setString(fbdo, "/pondmonitor/status", waterStatus);
   }
 
   gwq.processSerialCommands();
-  delay(10);
+  delay(2000);
 }
